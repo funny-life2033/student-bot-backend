@@ -52,8 +52,37 @@ io.on("connection", (socket) => {
     console.log("student client connect request ", token);
   });
 
-  socket.on("student bot connect", (username) => {
+  socket.on("student bot connect", async (username) => {
     console.log("student bot connect request ", username);
+
+    if (studentBots[username]) {
+      return socket.emit(
+        "student bot connect failed",
+        "The other bot is connected with the username"
+      );
+    }
+
+    const client = await studentClient.find({ username });
+    if (!client) {
+      return socket.emit(
+        "student bot connect failed",
+        "This user doesn't exist"
+      );
+    }
+
+    socket.username = username;
+    socket.role = "student bot";
+    studentBots[username] = socket;
+
+    socket.emit("student bot connect success", username);
+
+    if (studentClients[username]) {
+      studentClients[username].emit("student bot connect");
+    }
+
+    if (agent) {
+      agent.emit("student bot connect", username);
+    }
   });
 
   socket.on("disconnect", () => {
