@@ -62,9 +62,7 @@ io.on("connection", (socket) => {
       );
     }
 
-    const client = await studentClient.find({ username });
-
-    console.log("client", client);
+    const client = await studentClient.findOne({ username });
 
     if (!client) {
       return socket.emit(
