@@ -63,6 +63,9 @@ io.on("connection", (socket) => {
     }
 
     const client = await studentClient.find({ username });
+
+    console.log("client", client);
+
     if (!client) {
       return socket.emit(
         "student bot connect failed",
