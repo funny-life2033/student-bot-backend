@@ -7,6 +7,7 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const studentClientRoute = require("./routes/studentClientRoute");
 const studentClient = require("./models/studentClient");
+const { getClients } = require("./controllers/studentClient");
 
 connectDB();
 
@@ -44,8 +45,33 @@ let studentBots = {};
 let agent;
 
 io.on("connection", (socket) => {
-  socket.on("agent connect", () => {
+  socket.on("agent connect", async () => {
     console.log("agent connect request");
+
+    if (agent) {
+      return socket.emit(
+        "agent connect failed",
+        "The other agent is already connected"
+      );
+    }
+    let clients = await getClients();
+
+    if (clients.error) {
+      return socket.emit("agent connect failed", "Server error");
+    }
+    socket.role = "agent";
+    agent = socket;
+
+    let studentBotUsernames = Object.keys(studentBots);
+
+    socket.emit("agent connect success", {
+      connectedStudentBots: studentBotUsernames,
+      studentClients: clients,
+    });
+
+    for (let studentBotUsername of studentBotUsernames) {
+      studentBots[studentBotUsername].emit("agent connect");
+    }
   });
 
   socket.on("student client connect", (token) => {
@@ -83,6 +109,18 @@ io.on("connection", (socket) => {
 
     if (agent) {
       agent.emit("student bot connect", username);
+    }
+  });
+
+  socket.on("isWorking", (isWorking) => {
+    if (socket.role === "student bot") {
+      if (studentClients[socket.username]) {
+        studentClients[socket.username].emit("isWorking", isWorking);
+      }
+
+      if (agent) {
+        agent.emit("isWorking", { isWorking, username: socket.username });
+      }
     }
   });
 

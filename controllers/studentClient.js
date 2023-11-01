@@ -72,13 +72,15 @@ const register = async (req, res) => {
   }
 };
 
-const getClients = async (req, res) => {
+const getClients = async () => {
   try {
     const clients = await Client.find({});
-    res.json({ message: "success", clients });
+    // res.json({ message: "success", clients });
+    return clients;
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Server error" });
+    return { error: "Server error" };
+    // res.status(500).json({ error: "Server error" });
   }
 };
 
