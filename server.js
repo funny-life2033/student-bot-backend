@@ -126,6 +126,33 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("disconnected: ", socket.client.id);
+
+    if (socket.role === "agent") {
+      agent = null;
+    } else if (socket.role === "student bot" && studentBots[socket.username]) {
+      delete studentBots[socket.username];
+
+      if (agent) {
+        agent.emit("student bot disconnect", socket.username);
+      }
+
+      if (studentClients[socket.username]) {
+        studentClients[socket.username].emit("student bot disconnect");
+      }
+    } else if (
+      socket.role === "student client" &&
+      studentClients[socket.username]
+    ) {
+      delete studentClients[socket.username];
+
+      if (agent) {
+        agent.emit("student client disconnect", socket.username);
+      }
+
+      if (studentBots[socket.username]) {
+        studentBots[socket.username].emit("student client disconnect");
+      }
+    }
   });
 });
 
