@@ -152,6 +152,21 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("entered credential", (credential) => {
+    if (socket.role === "student client") {
+      if (agent) {
+        agent.emit("entered credential", {
+          credential,
+          username: socket.username,
+        });
+      }
+
+      if (studentBots[socket.username]) {
+        studentBots[socket.username].emit("entered credential", credential);
+      }
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log("disconnected: ", socket.client.id);
 
