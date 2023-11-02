@@ -127,14 +127,14 @@ io.on("connection", (socket) => {
     socket.role = "student bot";
     studentBots[username] = socket;
 
-    socket.emit("student bot connect success", username);
+    socket.emit("student bot connect success", client);
 
     if (studentClients[username]) {
       studentClients[username].emit("student bot connect");
     }
 
     if (agent) {
-      agent.emit("student bot connect", username);
+      agent.emit("student bot connect", client);
     }
   });
 
