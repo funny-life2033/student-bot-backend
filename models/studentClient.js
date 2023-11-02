@@ -11,6 +11,14 @@ const studentClientSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  credential: {
+    drivingLicenseNumber: {
+      type: String,
+      required: true,
+    },
+    drivingTestReferenceNumber: String,
+    theoryTestPassNumber: String,
+  },
 });
 
 studentClientSchema.pre("save", async function () {

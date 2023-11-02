@@ -94,10 +94,10 @@ io.on("connection", (socket) => {
 
     studentClients[username] = socket;
 
-    socket.emit("student client connect success", username);
+    socket.emit("student client connect success", result);
 
     if (agent) {
-      agent.emit("student client connect", username);
+      agent.emit("student client connect", result);
     }
 
     if (studentBots[username]) {

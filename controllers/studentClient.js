@@ -19,7 +19,7 @@ const login = async (username, password) => {
       return { error: "Incorrect password" };
     }
 
-    return {};
+    return client;
   } catch (error) {
     console.log(error);
     return { error: "Server error" };
