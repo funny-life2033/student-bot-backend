@@ -167,6 +167,86 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("student bot start", () => {
+    if (socket.role === "student client") {
+      if (agent) {
+        agent.emit("student bot start", socket.username);
+      }
+
+      if (studentBots[socket.username]) {
+        studentBots[socket.username].emit("student bot start");
+      }
+    } else if (socket.role === "student bot") {
+      if (agent) {
+        agent.emit("student bot start", socket.username);
+      }
+
+      if (studentClients[socket.username]) {
+        studentClients[socket.username].emit("student bot start");
+      }
+    } else if (socket.role === "agent") {
+      if (studentBots[socket.username]) {
+        studentBots[socket.username].emit("student bot start");
+      }
+
+      if (studentClients[socket.username]) {
+        studentClients[socket.username].emit("student bot start");
+      }
+    }
+  });
+
+  socket.on("student bot stop", () => {
+    if (socket.role === "student client") {
+      if (agent) {
+        agent.emit("student bot stop", socket.username);
+      }
+
+      if (studentBots[socket.username]) {
+        studentBots[socket.username].emit("student bot stop");
+      }
+    } else if (socket.role === "student bot") {
+      if (agent) {
+        agent.emit("student bot stop", socket.username);
+      }
+
+      if (studentClients[socket.username]) {
+        studentClients[socket.username].emit("student bot stop");
+      }
+    } else if (socket.role === "agent") {
+      if (studentBots[socket.username]) {
+        studentBots[socket.username].emit("student bot stop");
+      }
+
+      if (studentClients[socket.username]) {
+        studentClients[socket.username].emit("student bot stop");
+      }
+    }
+  });
+
+  socket.on("student bot started", () => {
+    if (socket.role === "student bot") {
+      if (agent) {
+        agent.emit("student bot started", socket.username);
+      }
+
+      if (studentClients[socket.username]) {
+        studentClients[socket.username].emit("student bot started");
+      }
+    }
+  });
+
+  socket.on("student bot stopped", () => {
+    if (socket.role === "student bot") {
+      if (agent) {
+        agent.emit("student bot stopped", socket.username);
+      }
+
+      if (studentClients[socket.username]) {
+        studentClients[socket.username].emit("student bot stopped");
+      }
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log("disconnected: ", socket.client.id);
 
