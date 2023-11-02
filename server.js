@@ -7,7 +7,7 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const studentClientRoute = require("./routes/studentClientRoute");
 const studentClient = require("./models/studentClient");
-const { getClients } = require("./controllers/studentClient");
+const { getClients, login } = require("./controllers/studentClient");
 
 connectDB();
 
@@ -74,8 +74,35 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("student client connect", (token) => {
-    console.log("student client connect request ", token);
+  socket.on("student client connect", async ({ username, password }) => {
+    console.log("student client connect request ", username, password);
+
+    let result = await login(username, password);
+    if (result.error) {
+      return socket.emit("student client connect failed", result.error);
+    }
+
+    if (studentClients[username]) {
+      return socket.emit(
+        "student client connect failed",
+        "The other app is already connected with your credential"
+      );
+    }
+
+    socket.role = "student client";
+    socket.username = username;
+
+    studentClients[username] = socket;
+
+    socket.emit("student client connect success", result.token);
+
+    if (agent) {
+      agent.emit("student client connect", username);
+    }
+
+    if (studentBots[username]) {
+      studentBots[username].emit("student client connect");
+    }
   });
 
   socket.on("student bot connect", async (username) => {

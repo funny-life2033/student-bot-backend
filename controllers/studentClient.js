@@ -3,33 +3,29 @@ const Client = require("../models/studentClient");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const login = async (req, res) => {
+const login = async (username, password) => {
   try {
-    const { username, password } = req.body;
-
-    console.log("login: ", req.body);
-
     if (!username || !password || username === "" || password === "") {
-      return res.status(400).json({ error: "All fields are required" });
+      return { error: "All fields are required" };
     }
 
     const client = await Client.findOne({ username });
 
     if (!client) {
-      return res.status(400).json({ error: "This username doesn't exist" });
+      return { error: "This username doesn't exist" };
     }
 
     const auth = await bcrypt.compare(password, client.password);
     if (!auth) {
-      return res.status(400).json({ error: "Incorrect password" });
+      return { error: "Incorrect password" };
     }
 
     const token = createSecretToken({ username });
 
-    res.json({ message: "success", token });
+    return { token };
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Server error" });
+    return { error: "Server error" };
   }
 };
 
