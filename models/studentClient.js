@@ -12,10 +12,7 @@ const studentClientSchema = new mongoose.Schema({
     required: true,
   },
   credential: {
-    drivingLicenseNumber: {
-      type: String,
-      required: true,
-    },
+    drivingLicenseNumber: String,
     drivingTestReferenceNumber: String,
     theoryTestPassNumber: String,
   },
