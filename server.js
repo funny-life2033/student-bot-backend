@@ -113,6 +113,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("isWorking", (isWorking) => {
+    console.log(socket.username, "isWorking");
+
     if (socket.role === "student bot") {
       if (studentClients[socket.username]) {
         studentClients[socket.username].emit("isWorking", isWorking);
@@ -128,8 +130,10 @@ io.on("connection", (socket) => {
     console.log("disconnected: ", socket.client.id);
 
     if (socket.role === "agent") {
+      console.log("agent disconnect");
       agent = null;
     } else if (socket.role === "student bot" && studentBots[socket.username]) {
+      console.log("student bot disconnect");
       delete studentBots[socket.username];
 
       if (agent) {
@@ -143,6 +147,7 @@ io.on("connection", (socket) => {
       socket.role === "student client" &&
       studentClients[socket.username]
     ) {
+      console.log("student client disconnect");
       delete studentClients[socket.username];
 
       if (agent) {
