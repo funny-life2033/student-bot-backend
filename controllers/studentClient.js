@@ -47,6 +47,56 @@ const register = async (req, res) => {
   }
 };
 
+const enterCredential = async (req, res) => {
+  try {
+    const {
+      username,
+      drivingLicenseNumber,
+      drivingTestReferenceNumber,
+      theoryTestPassNumber,
+    } = req.body;
+
+    if (
+      !drivingLicenseNumber ||
+      drivingLicenseNumber === "" ||
+      ((!drivingTestReferenceNumber || drivingTestReferenceNumber === "") &&
+        (!theoryTestPassNumber || theoryTestPassNumber === ""))
+    ) {
+      return res.status(400).json({
+        error:
+          "Driving License Number, Driving Test Reference Number or Theory Test Pass Number are required",
+      });
+    }
+
+    let client = await Client.findOneAndUpdate(
+      { username },
+      {
+        credential: {
+          drivingLicenseNumber,
+          drivingTestReferenceNumber,
+          theoryTestPassNumber,
+        },
+      },
+      { new: true }
+    );
+
+    res.json({ client });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+const removeCredential = async (username) => {
+  let client = await Client.findOneAndUpdate(
+    { username },
+    { credential: null },
+    { new: true }
+  );
+
+  return client;
+};
+
 const getClients = async () => {
   try {
     const clients = await Client.find({});
@@ -59,4 +109,10 @@ const getClients = async () => {
   }
 };
 
-module.exports = { login, register, getClients };
+module.exports = {
+  login,
+  register,
+  getClients,
+  enterCredential,
+  removeCredential,
+};
