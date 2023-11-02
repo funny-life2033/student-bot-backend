@@ -4,7 +4,6 @@ const connectDB = require("./config/db");
 const http = require("http");
 const socketio = require("socket.io");
 const cors = require("cors");
-const jwt = require("jsonwebtoken");
 const studentClientRoute = require("./routes/studentClientRoute");
 const studentClient = require("./models/studentClient");
 const { getClients, login } = require("./controllers/studentClient");
