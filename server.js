@@ -168,6 +168,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("student bot start", () => {
+    console.log("student bot start from ", socket.role, socket.username);
+
     if (socket.role === "student client") {
       if (agent) {
         agent.emit("student bot start", socket.username);
@@ -196,6 +198,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("student bot stop", () => {
+    console.log("student bot stop from ", socket.role, socket.username);
     if (socket.role === "student client") {
       if (agent) {
         agent.emit("student bot stop", socket.username);
