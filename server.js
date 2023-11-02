@@ -250,10 +250,10 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("verify is needed", () => {
+  socket.on("error alert", (error) => {
     if (socket.role === "student bot") {
       if (agent) {
-        agent.emit("verify is needed", socket.username);
+        agent.emit("error alert", { username: socket.username, error });
       }
     }
   });
