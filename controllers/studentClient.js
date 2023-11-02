@@ -1,6 +1,5 @@
 const Client = require("../models/studentClient");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 
 const login = async (username, password) => {
   try {
@@ -24,23 +23,6 @@ const login = async (username, password) => {
     console.log(error);
     return { error: "Server error" };
   }
-};
-
-const clientVerification = (req, res) => {
-  const { token } = req.body;
-
-  jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
-    if (err) {
-      return res.status(400).json({ error: "Invalid token" });
-    }
-
-    const client = await Client.find({ username: data.username });
-    if (client) {
-      return res.json(client);
-    }
-
-    return res.status(400).json({ error: "Invalid token" });
-  });
 };
 
 const register = async (req, res) => {
@@ -77,4 +59,4 @@ const getClients = async () => {
   }
 };
 
-module.exports = { login, register, getClients, clientVerification };
+module.exports = { login, register, getClients };
