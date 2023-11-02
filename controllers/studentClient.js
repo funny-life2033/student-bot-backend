@@ -1,4 +1,3 @@
-const { createSecretToken } = require("../config/SecretToken");
 const Client = require("../models/studentClient");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -20,9 +19,7 @@ const login = async (username, password) => {
       return { error: "Incorrect password" };
     }
 
-    const token = createSecretToken({ username });
-
-    return { token };
+    return {};
   } catch (error) {
     console.log(error);
     return { error: "Server error" };

@@ -94,7 +94,7 @@ io.on("connection", (socket) => {
 
     studentClients[username] = socket;
 
-    socket.emit("student client connect success", result.token);
+    socket.emit("student client connect success", username);
 
     if (agent) {
       agent.emit("student client connect", username);
