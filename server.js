@@ -250,6 +250,14 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("verify is needed", () => {
+    if (socket.role === "student bot") {
+      if (agent) {
+        agent.emit("verify is needed", socket.username);
+      }
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log("disconnected: ", socket.client.id);
 
