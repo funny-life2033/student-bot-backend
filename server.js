@@ -6,7 +6,11 @@ const socketio = require("socket.io");
 const cors = require("cors");
 const studentClientRoute = require("./routes/studentClientRoute");
 const studentClient = require("./models/studentClient");
-const { getClients, login } = require("./controllers/studentClient");
+const {
+  getClients,
+  login,
+  removeCredential,
+} = require("./controllers/studentClient");
 
 connectDB();
 
@@ -193,6 +197,25 @@ io.on("connection", (socket) => {
 
       if (studentClients[socket.username]) {
         studentClients[socket.username].emit("student bot start");
+      }
+    }
+  });
+
+  socket.on("student bot start failed", async (error) => {
+    if (socket.role === "student bot") {
+      let client = await removeCredential(socket.username);
+      if (agent) {
+        agent.emit("student bot start failed", {
+          error,
+          client,
+        });
+      }
+
+      if (studentClients[socket.username]) {
+        studentClients[socket.username].emit("student bot start failed", {
+          error,
+          client,
+        });
       }
     }
   });
