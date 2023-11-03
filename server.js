@@ -171,6 +171,21 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("wrong credential", async () => {
+    if (socket.role === "student bot") {
+      let client = await removeCredential(socket.username);
+      if (client) {
+        if (agent) {
+          agent.emit("wrong credential", socket.username);
+        }
+
+        if (studentClients[socket.username]) {
+          studentClients[socket.username].emit("wrong credential");
+        }
+      }
+    }
+  });
+
   socket.on("student bot start", (username) => {
     console.log(
       "student bot start from ",
