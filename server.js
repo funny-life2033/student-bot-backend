@@ -171,8 +171,12 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("student bot start", () => {
-    console.log("student bot start from ", socket.role, socket.username);
+  socket.on("student bot start", (username) => {
+    console.log(
+      "student bot start from ",
+      socket.role,
+      socket.username || username
+    );
 
     if (socket.role === "student client") {
       if (agent) {
@@ -191,12 +195,12 @@ io.on("connection", (socket) => {
         studentClients[socket.username].emit("student bot start");
       }
     } else if (socket.role === "agent") {
-      if (studentBots[socket.username]) {
-        studentBots[socket.username].emit("student bot start");
+      if (studentBots[username]) {
+        studentBots[username].emit("student bot start");
       }
 
-      if (studentClients[socket.username]) {
-        studentClients[socket.username].emit("student bot start");
+      if (studentClients[username]) {
+        studentClients[username].emit("student bot start");
       }
     }
   });
