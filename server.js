@@ -142,16 +142,16 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("isWorking", (isWorking) => {
-    console.log(socket.username, "isWorking");
+  socket.on("is working", (isWorking) => {
+    console.log(socket.username, "is working");
 
     if (socket.role === "student bot") {
       if (studentClients[socket.username]) {
-        studentClients[socket.username].emit("isWorking", isWorking);
+        studentClients[socket.username].emit("is working", isWorking);
       }
 
       if (agent) {
-        agent.emit("isWorking", { isWorking, username: socket.username });
+        agent.emit("is working", { isWorking, username: socket.username });
       }
     }
   });
