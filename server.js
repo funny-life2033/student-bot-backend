@@ -176,11 +176,11 @@ io.on("connection", (socket) => {
       let client = await removeCredential(socket.username);
       if (client) {
         if (agent) {
-          agent.emit("wrong credential", socket.username);
+          agent.emit("wrong credential", client);
         }
 
         if (studentClients[socket.username]) {
-          studentClients[socket.username].emit("wrong credential");
+          studentClients[socket.username].emit("wrong credential", client);
         }
       }
     }
