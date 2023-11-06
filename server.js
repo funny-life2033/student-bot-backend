@@ -300,6 +300,14 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("available dates", (availableDates) => {
+    if (socket.role === "student bot") {
+      if (studentClients[socket.username]) {
+        studentClients[socket.username].emit("available dates", availableDates);
+      }
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log("disconnected: ", socket.client.id);
 
