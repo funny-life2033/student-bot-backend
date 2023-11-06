@@ -186,6 +186,14 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("no test centre", () => {
+    if (socket.role === "student bot") {
+      if (studentClients[socket.username]) {
+        studentClients[socket.username].emit("no test centre");
+      }
+    }
+  });
+
   socket.on("student bot start", (username) => {
     console.log(
       "student bot start from ",
