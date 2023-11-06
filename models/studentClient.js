@@ -15,6 +15,7 @@ const studentClientSchema = new mongoose.Schema({
     drivingLicenseNumber: String,
     drivingTestReferenceNumber: String,
     theoryTestPassNumber: String,
+    testCentre: String,
   },
 });
 

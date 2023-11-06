@@ -54,13 +54,16 @@ const enterCredential = async (req, res) => {
       drivingLicenseNumber,
       drivingTestReferenceNumber,
       theoryTestPassNumber,
+      testCentre,
     } = req.body;
 
     if (
       !drivingLicenseNumber ||
       drivingLicenseNumber === "" ||
       ((!drivingTestReferenceNumber || drivingTestReferenceNumber === "") &&
-        (!theoryTestPassNumber || theoryTestPassNumber === ""))
+        (!theoryTestPassNumber || theoryTestPassNumber === "")) ||
+      !testCentre ||
+      testCentre === ""
     ) {
       return res.status(400).json({
         error:
@@ -75,6 +78,7 @@ const enterCredential = async (req, res) => {
           drivingLicenseNumber,
           drivingTestReferenceNumber,
           theoryTestPassNumber,
+          testCentre,
         },
       },
       { new: true }
