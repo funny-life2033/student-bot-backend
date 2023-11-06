@@ -202,12 +202,14 @@ io.on("connection", (socket) => {
     );
 
     if (socket.role === "student client") {
-      if (agent) {
-        agent.emit("student bot start", socket.username);
-      }
-
       if (studentBots[socket.username]) {
         studentBots[socket.username].emit("student bot start");
+
+        if (agent) {
+          agent.emit("student bot start", socket.username);
+        }
+      } else {
+        socket.emit("student bot start failed", "The bot is not connected");
       }
     } else if (socket.role === "student bot") {
       if (agent) {
@@ -220,10 +222,12 @@ io.on("connection", (socket) => {
     } else if (socket.role === "agent") {
       if (studentBots[username]) {
         studentBots[username].emit("student bot start");
-      }
 
-      if (studentClients[username]) {
-        studentClients[username].emit("student bot start");
+        if (studentClients[username]) {
+          studentClients[username].emit("student bot start");
+        }
+      } else {
+        socket.emit("student bot start failed", "The bot is not connected");
       }
     }
   });
