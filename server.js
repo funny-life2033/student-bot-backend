@@ -48,6 +48,8 @@ let studentBots = {};
 let agent;
 
 io.on("connection", (socket) => {
+  console.log("connect request ", socket.id);
+
   socket.on("agent connect", async () => {
     console.log("agent connect request");
 
