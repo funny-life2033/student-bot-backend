@@ -143,7 +143,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("is working", (isWorking) => {
-    console.log(socket.username, "is working");
+    console.log(socket.username, "is working ", socket.id);
 
     if (socket.role === "student bot") {
       if (studentClients[socket.username]) {
