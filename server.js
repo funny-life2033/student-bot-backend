@@ -310,6 +310,10 @@ io.on("connection", (socket) => {
       if (agent) {
         agent.emit("error alert", { username: socket.username, error });
       }
+
+      if (studentClients[socket.username]) {
+        studentClients[socket.username].emit("error alert", error);
+      }
     }
   });
 
