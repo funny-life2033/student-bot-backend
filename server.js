@@ -104,6 +104,7 @@ io.on("connection", (socket) => {
     }
 
     if (studentBots[username]) {
+      console.log("student client connect emit");
       studentBots[username].emit("student client connect");
     }
   });
