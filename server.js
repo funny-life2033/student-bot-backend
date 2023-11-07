@@ -326,27 +326,30 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("accept slot", (slot) => {
+  socket.on("student accept slot", (slot) => {
     if (socket.role === "student client") {
       if (studentBots[socket.username]) {
-        studentBots[socket.username].emit("accept slot", slot);
+        studentBots[socket.username].emit("student accept slot", slot);
 
         if (agent) {
-          agent.emit("accept slot", { slot, username: socket.username });
+          agent.emit("student accept slot", {
+            slot,
+            username: socket.username,
+          });
         }
       } else {
-        socket.emit("accept slot failed");
+        socket.emit("student accept slot failed");
       }
     }
   });
 
-  socket.on("accepted slot", () => {
+  socket.on("student accepted slot", () => {
     if (socket.role === "student bot") {
       if (studentClients[socket.username]) {
-        studentClients[socket.username].emit("accepted slot");
+        studentClients[socket.username].emit("student accepted slot");
 
         if (agent) {
-          agent.emit("accepted slot", socket.username);
+          agent.emit("astudent ccepted slot", socket.username);
         }
       }
     }
