@@ -346,6 +346,14 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("candidate detail required", () => {
+    if (socket.role === "student bot") {
+      if (studentClients[socket.username]) {
+        studentClients[socket.username].emit("candidate detail required");
+      }
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log("disconnected: ", socket.client.id);
 
