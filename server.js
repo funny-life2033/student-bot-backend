@@ -132,6 +132,7 @@ io.on("connection", (socket) => {
     socket.role = "student bot";
     studentBots[username] = socket;
 
+    console.log("student bot connect success emit");
     socket.emit("student bot connect success", client);
 
     if (studentClients[username]) {
